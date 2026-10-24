@@ -177,85 +177,108 @@
     </section>
 
     <!-- ======================================================== -->
-    <!-- 2b, 3, 4. INVITATION DETAILS CONTAINER (BACKGROUND2)      -->
+    <!-- 2b. CEREMONY INFO & INVITATION DETAILS (EXACT REFERENCE)   -->
     <!-- ======================================================== -->
     <div id="details-page" class="relative w-full overflow-hidden border-b border-[#ab7a45]/20" style="background-image: url('images/background2_hd.jpeg'); background-size: 100% 100%; background-position: center top; background-repeat: no-repeat;">
 
-      <!-- Formal Announcement & Date -->
-      <section class="pt-[105px] sm:pt-[115px] md:pt-[125px] pb-6 px-6 text-center">
-        <!-- Heading: Ceremony Info in Maroon -->
-        <h2 class="font-lora text-xl sm:text-2xl font-bold text-[#640e1b] uppercase tracking-wider mb-2">
-          Ceremony Info
+      <div class="relative z-10 pt-[90px] sm:pt-[105px] md:pt-[115px] pb-8 px-4 sm:px-6 max-w-md mx-auto text-center">
+
+        <!-- 1. Heading: CEREMONY INFO (Serif, Maroon, Uppercase) -->
+        <h2 class="font-lora text-lg sm:text-xl font-bold text-[#640e1b] uppercase tracking-[0.18em] mb-5 sm:mb-6 drop-shadow-xs">
+          CEREMONY INFO
         </h2>
-        <div class="w-12 h-0.5 bg-[#ab7a45] mx-auto mb-3"></div>
 
-        <!-- Invitation Message -->
-        <p class="font-lora text-xs sm:text-sm text-[#640e1b]/90 max-w-md mx-auto italic px-4 leading-relaxed font-normal mb-1">
-          "Together with our families, we invite you to our wedding"
-        </p>
-
-        <!-- Date & Time Badges -->
-        <div class="mt-4 flex flex-col items-center justify-center gap-2 max-w-md mx-auto">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#ab7a45]/40 bg-[#f7e3cd]/65 backdrop-blur-xs text-[#640e1b] font-lora text-xs sm:text-[13px] font-medium shadow-xs">
-            <svg class="w-3.5 h-3.5 text-[#ab7a45] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span>Reception: Saturday, November 28, 2026 • 6:30 PM</span>
+        <!-- 2. Parents: Side-by-Side with Vertical Thin Gold Divider Line -->
+        <div class="grid grid-cols-2 max-w-sm sm:max-w-md mx-auto relative mb-5 sm:mb-6">
+          <!-- Groom's Parents (Left) -->
+          <div class="text-center pr-3">
+            <span class="block font-lora text-xs sm:text-sm text-[#ab7a45] italic font-normal mb-1">Mr. &amp; Mrs.</span>
+            <span class="block font-lora text-xs sm:text-[13px] font-bold text-[#640e1b] leading-snug">Mahadeva M</span>
+            <span class="block font-lora text-xs sm:text-[13px] font-bold text-[#640e1b] leading-snug">Savithramma</span>
           </div>
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#ab7a45]/40 bg-[#f7e3cd]/65 backdrop-blur-xs text-[#640e1b] font-lora text-xs sm:text-[13px] font-medium shadow-xs">
-            <svg class="w-3.5 h-3.5 text-[#ab7a45] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span>Muhurtam: Sunday, 29-11-2026 • 7:00 A.M. TO 7:40 A.M.</span>
+
+          <!-- Vertical Center Dividing Line -->
+          <div class="absolute left-1/2 top-0.5 bottom-0.5 w-px -translate-x-1/2 bg-[#ab7a45]/40"></div>
+
+          <!-- Bride's Parents (Right) -->
+          <div class="text-center pl-3">
+            <span class="block font-lora text-xs sm:text-sm text-[#ab7a45] italic font-normal mb-1">Mr. &amp; Mrs.</span>
+            <span class="block font-lora text-xs sm:text-[13px] font-bold text-[#640e1b] leading-snug">Lokesh S R</span>
+            <span class="block font-lora text-xs sm:text-[13px] font-bold text-[#640e1b] leading-snug">Nandini G R</span>
           </div>
         </div>
-      </section>
 
-
-      <!-- Family Information (Groom & Bride) -->
-      <section class="pt-2 pb-14 px-6">
-        <div class="text-center mb-6">
-          <h2 class="font-lora text-xl font-bold text-[#640e1b] uppercase tracking-wider">
-            Family
-          </h2>
-          <div class="w-12 h-0.5 bg-[#ab7a45] mx-auto mt-2"></div>
+        <!-- 3. Invitation Subtext (Maroon, Tracking, Uppercase) -->
+        <div class="text-center px-2 mb-6 sm:mb-7">
+          <p class="font-lora text-[11px] sm:text-xs md:text-sm uppercase tracking-[0.2em] text-[#640e1b] font-semibold leading-relaxed">
+            TOGETHER WITH OUR FAMILIES<br />
+            WE INVITE YOU TO OUR WEDDING
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <!-- Groom's Family Card -->
-          <div class="bg-[#f7e3cd]/55 backdrop-blur-xs rounded-2xl p-5 border border-[#ab7a45]/35 shadow-xs text-center flex flex-col justify-between">
-            <div>
-              <span class="text-[11px] font-lora uppercase tracking-[0.2em] text-[#ab7a45] font-semibold block mb-1">Groom</span>
-              <h3 class="font-lora text-base font-bold text-[#640e1b]">CHANDRASHEKAR GOWDA M</h3>
-              
-              <div class="my-3 text-xs font-lora text-[#640e1b]/85 space-y-1">
-                <p><strong class="text-[#ab7a45]">Father:</strong> MAHADEVA M</p>
-                <p><strong class="text-[#ab7a45]">Mother:</strong> SAVITHRAMMA</p>
-              </div>
-            </div>
-            <p class="text-[11px] font-sans text-[#640e1b]/75 border-t border-[#ab7a45]/20 pt-3">
-              #11, Vinayaka nilaya, challeghatta main road, Bangalore 560074
-            </p>
+        <!-- 4. Bride & Groom Names -->
+        <div class="text-center px-2 mb-6 sm:mb-7">
+          <h3 class="font-lora text-2xl sm:text-3xl md:text-[2rem] font-normal text-[#640e1b] tracking-wide leading-tight">
+            Chandrashekar Gowda M
+          </h3>
+          <div class="font-brush text-xl sm:text-2xl text-[#ab7a45] my-1 sm:my-1.5 leading-none">
+            &amp;
           </div>
+          <h3 class="font-lora text-2xl sm:text-3xl md:text-[2rem] font-normal text-[#640e1b] tracking-wide leading-tight">
+            Impu L
+          </h3>
+        </div>
 
-          <!-- Bride's Family Card -->
-          <div class="bg-[#f7e3cd]/55 backdrop-blur-xs rounded-2xl p-5 border border-[#ab7a45]/35 shadow-xs text-center flex flex-col justify-between">
-            <div>
-              <span class="text-[11px] font-lora uppercase tracking-[0.2em] text-[#ab7a45] font-semibold block mb-1">Bride</span>
-              <h3 class="font-lora text-base font-bold text-[#640e1b]">IMPU L</h3>
-
-              <div class="my-3 text-xs font-lora text-[#640e1b]/85 space-y-1">
-                <p><strong class="text-[#ab7a45]">Father:</strong> LOKESH SR</p>
-                <p><strong class="text-[#ab7a45]">Mother:</strong> NANDINI GR</p>
-              </div>
-            </div>
-            <p class="text-[11px] font-sans text-[#640e1b]/75 border-t border-[#ab7a45]/20 pt-3">
-              #91, Annapoorneshwari Nilaya, 5th cross raju layout, Bangalore 560060
-            </p>
+        <!-- 5. Event 1: RECEPTION -->
+        <div class="text-center mb-6 sm:mb-7">
+          <h4 class="font-lora text-xs sm:text-sm font-semibold uppercase tracking-[0.22em] text-[#ab7a45] mb-0.5">
+            RECEPTION
+          </h4>
+          <p class="font-lora text-xs sm:text-[13px] text-[#8e6130] font-normal tracking-wide mb-1">
+            Nandhana Convention Hall
+          </p>
+          <div class="font-lora text-[11px] sm:text-xs text-[#ab7a45] uppercase tracking-[0.2em] mb-2 font-medium">
+            AT 19:00
+          </div>
+          <div class="flex items-center justify-center gap-3 sm:gap-4 font-lora text-xs sm:text-sm uppercase tracking-widest text-[#640e1b]">
+            <span class="tracking-[0.18em] font-medium">SATURDAY</span>
+            <span class="text-[#ab7a45]/45 text-xl font-light select-none">|</span>
+            <span class="text-3xl sm:text-4xl font-normal text-[#640e1b] font-lora px-1">28</span>
+            <span class="text-[#ab7a45]/45 text-xl font-light select-none">|</span>
+            <span class="tracking-[0.18em] font-medium">NOVEMBER</span>
+          </div>
+          <div class="font-lora text-sm sm:text-base text-[#640e1b] font-normal tracking-widest mt-1">
+            2026
           </div>
         </div>
-      </section>
 
+        <!-- 6. Event 2: WEDDING CEREMONY (MUHURTHAM) -->
+        <div class="text-center mb-5 sm:mb-6">
+          <h4 class="font-lora text-xs sm:text-sm font-semibold uppercase tracking-[0.22em] text-[#ab7a45] mb-0.5">
+            WEDDING CEREMONY
+          </h4>
+          <p class="font-lora text-xs sm:text-[13px] text-[#8e6130] font-normal tracking-wide mb-1">
+            Nandhana Convention Hall (Muhurtham)
+          </p>
+          <div class="font-lora text-[11px] sm:text-xs text-[#ab7a45] uppercase tracking-[0.2em] mb-2 font-medium">
+            AT 09:15
+          </div>
+          <div class="flex items-center justify-center gap-3 sm:gap-4 font-lora text-xs sm:text-sm uppercase tracking-widest text-[#640e1b]">
+            <span class="tracking-[0.18em] font-medium">SUNDAY</span>
+            <span class="text-[#ab7a45]/45 text-xl font-light select-none">|</span>
+            <span class="text-3xl sm:text-4xl font-normal text-[#640e1b] font-lora px-1">29</span>
+            <span class="text-[#ab7a45]/45 text-xl font-light select-none">|</span>
+            <span class="tracking-[0.18em] font-medium">NOVEMBER</span>
+          </div>
+          <div class="font-lora text-sm sm:text-base text-[#640e1b] font-normal tracking-widest mt-1">
+            2026
+          </div>
+        </div>
+
+        <!-- 7. Spacer for natural bottom background flourish -->
+        <div class="h-8 sm:h-10"></div>
+
+      </div>
     </div>
 
 
@@ -344,7 +367,7 @@
 
         <!-- Time Display -->
         <div class="font-lora text-3xl sm:text-4xl font-medium text-[#ab7a45] mb-2 tracking-wide">
-          18:30
+          19:00
         </div>
 
         <!-- Date Line -->
@@ -363,12 +386,12 @@
         <div class="flex items-center justify-center gap-8 my-5 text-center">
           <div>
             <span class="block font-lora text-[11px] uppercase tracking-[0.18em] text-[#ab7a45] font-semibold">Welcome</span>
-            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">18:00</span>
+            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">18:30</span>
           </div>
           <div class="w-px h-8 bg-[#ab7a45]/30"></div>
           <div>
             <span class="block font-lora text-[11px] uppercase tracking-[0.18em] text-[#ab7a45] font-semibold">Reception</span>
-            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">18:30</span>
+            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">19:00</span>
           </div>
         </div>
 
@@ -464,7 +487,7 @@
 
         <!-- Add Reception to Calendar Button -->
         <div class="mt-6 flex flex-col items-center justify-center gap-1.5">
-          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Reception+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261128T130000Z%2F20261128T170000Z&ctz=Asia%2FKolkata&details=Wedding+Reception+of+Chandrashekar+Gowda+M+%26+Impu+L%0ASaturday%2C+November+28%2C+2026+%E2%80%A2+6%3A30+PM%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#ab7a45]/40 bg-white/90 backdrop-blur-xs text-[#640e1b] hover:bg-[#640e1b] hover:text-white transition-all text-xs sm:text-sm font-lora font-semibold shadow-xs">
+          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Reception+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261128T133000Z%2F20261128T173000Z&ctz=Asia%2FKolkata&details=Wedding+Reception+of+Chandrashekar+Gowda+M+%26+Impu+L%0ASaturday%2C+November+28%2C+2026+%E2%80%A2+7%3A00+PM+%2819%3A00%29%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#ab7a45]/40 bg-white/90 backdrop-blur-xs text-[#640e1b] hover:bg-[#640e1b] hover:text-white transition-all text-xs sm:text-sm font-lora font-semibold shadow-xs">
             <svg class="w-4 h-4 text-[#ab7a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
@@ -499,7 +522,7 @@
 
         <!-- Time Display -->
         <div class="font-lora text-2xl sm:text-3xl font-medium text-[#ab7a45] mb-2 tracking-wide">
-          07:00 A.M. – 07:40 A.M.
+          09:15 A.M.
         </div>
 
         <!-- Date Line -->
@@ -517,8 +540,8 @@
         <!-- Muhurtam Timing Details -->
         <div class="flex items-center justify-center gap-6 my-5 text-center">
           <div>
-            <span class="block font-lora text-[11px] uppercase tracking-[0.18em] text-[#ab7a45] font-semibold">Auspicious Muhurtam</span>
-            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">7:00 AM – 7:40 AM</span>
+            <span class="block font-lora text-[11px] uppercase tracking-[0.18em] text-[#ab7a45] font-semibold">Auspicious Muhurtham</span>
+            <span class="block font-lora text-base sm:text-lg font-bold text-[#640e1b] mt-0.5">9:15 AM (09:15)</span>
           </div>
         </div>
 
@@ -614,7 +637,7 @@
 
         <!-- Add Muhurtham to Calendar Button -->
         <div class="mt-6 flex flex-col items-center justify-center gap-1.5">
-          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Muhurtham+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261129T013000Z%2F20261129T053000Z&ctz=Asia%2FKolkata&details=Auspicious+Muhurtham+of+Chandrashekar+Gowda+M+%26+Impu+L+%287%3A00+AM+%E2%80%93+7%3A40+AM%29%0ASunday%2C+November+29%2C+2026%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#ab7a45]/40 bg-white/90 backdrop-blur-xs text-[#640e1b] hover:bg-[#640e1b] hover:text-white transition-all text-xs sm:text-sm font-lora font-semibold shadow-xs">
+          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Muhurtham+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261129T034500Z%2F20261129T074500Z&ctz=Asia%2FKolkata&details=Auspicious+Muhurtham+of+Chandrashekar+Gowda+M+%26+Impu+L+%289%3A15+AM%29%0ASunday%2C+November+29%2C+2026%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#ab7a45]/40 bg-white/90 backdrop-blur-xs text-[#640e1b] hover:bg-[#640e1b] hover:text-white transition-all text-xs sm:text-sm font-lora font-semibold shadow-xs">
             <svg class="w-4 h-4 text-[#ab7a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
