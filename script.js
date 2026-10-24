@@ -342,11 +342,63 @@ function toggleMusic() {
   }
 }
 
-// --- 4. Continuous Fluid Autoscroll Engine (Uninterrupted & Smooth) ---
-// Speed: 110 pixels per second (~1.83px per frame at 60Hz, 2x original speed)
-const SCROLL_SPEED_PX_PER_SEC = 110;
+// --- 4. Continuous Fluid Autoscroll Engine ---
+// Default speed: 80 px/sec (calm, balanced & readable; suggestions: 70 gentle, 80 balanced, 95 brisk)
+const SCROLL_SPEED_PX_PER_SEC = 80;
+// Slowdown speed while showcasing Photo Gallery: 12 px/sec
+const GALLERY_SLOW_SPEED_PX_PER_SEC = 12;
+
 let scrollAccumulator = 0.0;
 let lastScrollTime = null;
+
+// Photo Gallery Showcase State
+let isGalleryShowcaseActive = false;
+let galleryShowcaseDone = false;
+let gallerySlideCount = 0;
+let galleryShowcaseStartTime = null;
+
+// User Interrupt State (40-second pause)
+let userInterruptTimer = null;
+const USER_INTERRUPT_PAUSE_MS = 40000; // 40 seconds
+
+function handleUserInterrupt() {
+  if (!isEnvelopeOpened) return;
+
+  // If lightbox is currently open, don't schedule auto-scroll resume yet
+  if (lightbox && !lightbox.classList.contains('hidden')) {
+    pauseAutoScroll();
+    if (userInterruptTimer) {
+      clearTimeout(userInterruptTimer);
+      userInterruptTimer = null;
+    }
+    return;
+  }
+
+  // Pause auto-scroll immediately upon user interruption
+  pauseAutoScroll();
+
+  // Reset 40-second timer
+  if (userInterruptTimer) {
+    clearTimeout(userInterruptTimer);
+  }
+
+  userInterruptTimer = setTimeout(() => {
+    // Only resume if envelope is open and lightbox is closed
+    if (isEnvelopeOpened && (!lightbox || lightbox.classList.contains('hidden'))) {
+      startAutoScroll();
+    }
+  }, USER_INTERRUPT_PAUSE_MS);
+}
+
+// Attach user interruption listeners
+window.addEventListener('touchstart', handleUserInterrupt, { passive: true });
+window.addEventListener('wheel', handleUserInterrupt, { passive: true });
+window.addEventListener('pointerdown', handleUserInterrupt, { passive: true });
+window.addEventListener('keydown', (e) => {
+  if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Space'].includes(e.code)) {
+    handleUserInterrupt();
+  }
+}, { passive: true });
 
 function startAutoScroll() {
   if (isAutoScrollActive) return;
@@ -378,34 +430,66 @@ function toggleAutoScroll() {
   }
 }
 
+function checkGalleryShowcase(timestamp) {
+  if (galleryShowcaseDone) return;
+  const galleryEl = document.getElementById('gallery-section');
+  if (!galleryEl) return;
+
+  const rect = galleryEl.getBoundingClientRect();
+  // When gallery is nicely centered in the upper/middle viewport
+  const isCentered = rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.55;
+
+  if (isCentered) {
+    if (!isGalleryShowcaseActive) {
+      isGalleryShowcaseActive = true;
+      gallerySlideCount = 0;
+      galleryShowcaseStartTime = timestamp;
+      if (gallerySwiper && gallerySwiper.autoplay && !gallerySwiper.autoplay.running) {
+        gallerySwiper.autoplay.start();
+      }
+    } else {
+      // Safeguard: after 10.5 seconds (plenty of time for 5 photos at 1.8s each), resume normal scroll
+      if (galleryShowcaseStartTime && (timestamp - galleryShowcaseStartTime) > 10500) {
+        galleryShowcaseDone = true;
+        isGalleryShowcaseActive = false;
+      }
+    }
+  } else if (rect.top < -rect.height * 0.5) {
+    // If scrolled past the gallery section
+    galleryShowcaseDone = true;
+    isGalleryShowcaseActive = false;
+  }
+}
+
 function runScrollLoop(timestamp) {
   if (!isAutoScrollActive) return;
 
   if (lastScrollTime === null) {
     lastScrollTime = timestamp;
   }
-  // Clamp delta to prevent sudden jump if tab is switched/backgrounded
   const deltaSeconds = Math.min((timestamp - lastScrollTime) / 1000.0, 0.08);
   lastScrollTime = timestamp;
+
+  checkGalleryShowcase(timestamp);
+
+  // Slow down to 12 px/sec when showcasing the photo gallery; otherwise 80 px/sec
+  const currentSpeed = isGalleryShowcaseActive ? GALLERY_SLOW_SPEED_PX_PER_SEC : SCROLL_SPEED_PX_PER_SEC;
 
   const scrollTarget = document.scrollingElement || document.documentElement || document.body;
   const maxScroll = Math.max(0, scrollTarget.scrollHeight - window.innerHeight);
   const currentScroll = window.scrollY !== undefined ? window.scrollY : (window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop);
 
-  // Continuously scroll downward without unexpected pausing
+  // Continuously scroll downward
   if (currentScroll < maxScroll - 4) {
-    scrollAccumulator += SCROLL_SPEED_PX_PER_SEC * deltaSeconds;
+    scrollAccumulator += currentSpeed * deltaSeconds;
 
-    // Issue discrete integer scroll steps so Safari WebKit never truncates to 0
     if (scrollAccumulator >= 1.0) {
       const step = Math.floor(scrollAccumulator);
       scrollAccumulator -= step;
-
       window.scrollBy(0, step);
     }
   }
 
-  // Keep RAF loop alive continuously so scrolling never dies or gets stuck
   autoScrollRafId = requestAnimationFrame(runScrollLoop);
 }
 
@@ -773,9 +857,9 @@ function initGallerySwiper() {
     slidesPerView: 'auto',
     loop: true,
     loopedSlides: 6,
-    speed: 750,
+    speed: 480, // Snappy 480ms slide animation
     autoplay: {
-      delay: 3500,
+      delay: 1800, // Faster 1.8s turnover per photo (fast left-to-right showcase)
       disableOnInteraction: false,
       pauseOnMouseEnter: true,
     },
@@ -798,6 +882,17 @@ function initGallerySwiper() {
     },
     slideToClickedSlide: true,
     watchSlidesProgress: true,
+  });
+
+  // Track slide transitions during Gallery Showcase
+  gallerySwiper.on('slideChange', () => {
+    if (isGalleryShowcaseActive && !galleryShowcaseDone) {
+      gallerySlideCount++;
+      if (gallerySlideCount >= 5) {
+        galleryShowcaseDone = true;
+        isGalleryShowcaseActive = false;
+      }
+    }
   });
 
   // Clicking the active centered slide opens lightbox; clicking side slides brings them to center
