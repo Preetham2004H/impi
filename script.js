@@ -585,69 +585,145 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
 
-// --- 7. Guestbook & Wishes System ---
-function loadWishes() {
+// --- 7. Guestbook & Real-Time Cloud Wishes System ---
+const CLOUD_WISHES_ENDPOINT = 'https://kvdb.io/FS1ktdd75SfK9mmRbHSg1g/chandru_impu_wishes';
+
+let cachedWishesJson = '';
+
+async function fetchRemoteWishes() {
   const wishesList = document.getElementById('wishes-list');
   if (!wishesList) return;
 
-  // Clear legacy dummy wishes from localStorage if present
-  let stored = localStorage.getItem('chandru_impu_wishes');
-  if (stored) {
-    try {
-      let parsed = JSON.parse(stored);
-      parsed = parsed.filter(item => item.name !== "Suresh & Suma" && item.name !== "Praveen Kumar");
-      localStorage.setItem('chandru_impu_wishes', JSON.stringify(parsed));
-    } catch (e) {}
+  try {
+    const res = await fetch(CLOUD_WISHES_ENDPOINT + '?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      const stringified = JSON.stringify(data);
+      // Only re-render if data has changed to prevent UI flicker
+      if (stringified !== cachedWishesJson) {
+        cachedWishesJson = stringified;
+        localStorage.setItem('chandru_impu_wishes', stringified);
+        renderWishes(Array.isArray(data) ? data : []);
+      }
+    } else {
+      // Fallback to local storage if network is unreachable
+      loadLocalWishesFallback();
+    }
+  } catch (err) {
+    loadLocalWishesFallback();
   }
+}
 
-  const storedWishes = JSON.parse(localStorage.getItem('chandru_impu_wishes') || '[]');
+function loadLocalWishesFallback() {
+  const local = localStorage.getItem('chandru_impu_wishes');
+  if (local && local !== cachedWishesJson) {
+    cachedWishesJson = local;
+    try {
+      renderWishes(JSON.parse(local));
+    } catch (_) {}
+  }
+}
+
+function renderWishes(wishes) {
+  const wishesList = document.getElementById('wishes-list');
+  if (!wishesList) return;
 
   wishesList.innerHTML = '';
 
-  if (storedWishes.length === 0) {
+  if (!wishes || wishes.length === 0) {
     wishesList.classList.add('hidden');
     return;
   }
   wishesList.classList.remove('hidden');
 
-  storedWishes.forEach(item => {
+  wishes.forEach(item => {
     const card = document.createElement('div');
-    card.className = 'p-3 rounded-xl bg-white/85 border border-[#ab7a45]/30 shadow-xs text-left';
+    card.className = 'p-3 rounded-xl bg-white/85 border border-[#ab7a45]/30 shadow-xs text-left transition-all';
     card.innerHTML = `
       <div class="flex items-center justify-between mb-1">
-        <span class="font-lora text-xs font-bold text-[#640e1b]">${escapeHtml(item.name)}</span>
+        <span class="font-lora text-xs font-bold text-[#640e1b]">${escapeHtml(item.name || 'Anonymous Guest')}</span>
         <span class="text-[10px] text-[#ab7a45] font-sans">${escapeHtml(item.time || 'Recently')}</span>
       </div>
-      <p class="font-lora text-xs text-[#640e1b]/80 leading-relaxed">${escapeHtml(item.wish)}</p>
+      <p class="font-lora text-xs text-[#640e1b]/80 leading-relaxed">${escapeHtml(item.wish || '')}</p>
     `;
     wishesList.appendChild(card);
   });
 }
 
-function submitWish(e) {
+function loadWishes() {
+  fetchRemoteWishes();
+}
+
+async function submitWish(e) {
   e.preventDefault();
   const nameInput = document.getElementById('guest-name');
   const wishInput = document.getElementById('guest-wish');
+  const submitBtn = e.target.querySelector('button[type="submit"]');
 
   const name = nameInput.value.trim();
   const wish = wishInput.value.trim();
 
   if (!name || !wish) return;
 
-  const storedWishes = JSON.parse(localStorage.getItem('chandru_impu_wishes') || '[]');
-  storedWishes.unshift({
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'SENDING...';
+  }
+
+  // Format date nicely e.g. "Oct 24, 1:45 PM"
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' +
+                  now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+  const newWish = {
+    id: 'wish_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
     name: name,
     wish: wish,
-    time: "Just now"
-  });
+    time: dateStr,
+    timestamp: Date.now()
+  };
 
-  localStorage.setItem('chandru_impu_wishes', JSON.stringify(storedWishes));
-  loadWishes();
+  try {
+    // 1. Fetch latest array from cloud
+    let currentWishes = [];
+    try {
+      const res = await fetch(CLOUD_WISHES_ENDPOINT + '?t=' + Date.now(), { cache: 'no-store' });
+      if (res.ok) {
+        currentWishes = await res.json();
+        if (!Array.isArray(currentWishes)) currentWishes = [];
+      }
+    } catch (_) {
+      currentWishes = JSON.parse(localStorage.getItem('chandru_impu_wishes') || '[]');
+    }
 
-  nameInput.value = '';
-  wishInput.value = '';
+    // Add new wish to top
+    currentWishes.unshift(newWish);
 
-  alert("Thank you so much for your heartfelt blessings! 🌸");
+    // Optimistically update UI immediately
+    cachedWishesJson = JSON.stringify(currentWishes);
+    localStorage.setItem('chandru_impu_wishes', cachedWishesJson);
+    renderWishes(currentWishes);
+
+    nameInput.value = '';
+    wishInput.value = '';
+
+    // 2. Save updated array to cloud
+    await fetch(CLOUD_WISHES_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(currentWishes)
+    });
+
+    alert("Thank you so much for your heartfelt blessings! 💖");
+  } catch (err) {
+    console.error('Error saving wish to cloud:', err);
+    alert("Thank you so much for your heartfelt blessings! 💖");
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'SEND WISHES';
+    }
+  }
 }
 
 // Magic Wand AI Blessings Generator
@@ -682,6 +758,9 @@ function escapeHtml(str) {
     }[m];
   });
 }
+
+// Auto-poll cloud database every 5 seconds so any friend viewing on their phone sees wishes instantly!
+setInterval(fetchRemoteWishes, 5000);
 
 // --- 6b. Swiper 3D Coverflow Gallery ---
 let gallerySwiper = null;

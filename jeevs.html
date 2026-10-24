@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Guestbook Moderation — Chandru & Impu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4e0c7;
+      background-image: url('images/parchment_bg.png');
+      background-repeat: repeat;
+      color: #640e1b;
+      font-family: 'Lora', serif;
+    }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-lora { font-family: 'Lora', serif; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
+    
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.15); }
+    }
+    .pulse-dot {
+      animation: pulse-green 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-8 px-4 sm:px-6">
+
+  <!-- ======================================================== -->
+  <!-- 1. PIN LOCK SCREEN                                       -->
+  <!-- ======================================================== -->
+  <div id="pin-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#460000]/70 backdrop-blur-md">
+    <div class="w-full max-w-sm rounded-2xl p-6 sm:p-8 text-center shadow-2xl border border-[#ab7a45]/50 relative" style="background-color: #fdf6ec; background-image: url('images/parchment_bg.png'); background-repeat: repeat;">
+      
+      <!-- Gold Emblem / Lock Icon -->
+      <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#640e1b] to-[#40000a] flex items-center justify-center text-[#dfba87] shadow-md border border-[#ab7a45]/40">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+      </div>
+
+      <h1 class="font-cinzel text-lg sm:text-xl font-bold tracking-[0.16em] text-[#640e1b] uppercase">
+        Chandru & Impu
+      </h1>
+      <p class="font-lora text-xs sm:text-sm text-[#ab7a45] font-medium tracking-wide mt-1 mb-5">
+        Guestbook Moderation Portal
+      </p>
+
+      <form onsubmit="handlePinSubmit(event)" class="space-y-4">
+        <div>
+          <label for="admin-pin" class="block font-lora text-xs font-semibold text-[#640e1b]/80 mb-1.5 uppercase tracking-wider">
+            Enter Admin PIN
+          </label>
+          <input 
+            type="password" 
+            id="admin-pin" 
+            pattern="[0-9]*" 
+            inputmode="numeric" 
+            maxlength="8" 
+            placeholder="••••" 
+            required 
+            autofocus 
+            class="w-full text-center tracking-[0.4em] text-2xl font-bold py-2.5 px-4 rounded-xl border border-[#ab7a45]/50 bg-white/90 text-[#640e1b] focus:outline-none focus:ring-2 focus:ring-[#ab7a45] shadow-inner"
+          />
+          <p id="pin-error" class="hidden font-lora text-xs text-red-600 mt-2 font-medium">
+            Incorrect PIN. Please try again.
+          </p>
+          <p class="font-lora text-[11px] text-[#ab7a45]/80 mt-2 italic">
+            Default security PIN is: <strong>2026</strong>
+          </p>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3 rounded-full bg-gradient-to-r from-[#640e1b] via-[#4d000d] to-[#640e1b] text-white font-cinzel text-xs sm:text-sm font-bold tracking-[0.18em] uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-md border border-[#ab7a45]/40"
+        >
+          Unlock Dashboard
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-[#ab7a45]/20">
+        <a href="index.html" class="inline-flex items-center gap-1.5 text-xs text-[#ab7a45] hover:text-[#640e1b] transition-colors font-medium">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Wedding Invitation
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- 2. ADMIN DASHBOARD CONTENT                               -->
+  <!-- ======================================================== -->
+  <main id="dashboard" class="max-w-2xl mx-auto hidden pb-16">
+    
+    <!-- Top Navigation Bar -->
+    <header class="flex items-center justify-between py-3 px-4 rounded-2xl bg-[#fdf6ec]/90 border border-[#ab7a45]/30 shadow-xs mb-6 backdrop-blur-xs">
+      <a href="index.html" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#640e1b] hover:text-[#ab7a45] transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <span>View Invitation</span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <button onclick="promptChangePin()" class="text-xs text-[#ab7a45] hover:text-[#640e1b] transition-colors font-medium underline underline-offset-2">
+          Change PIN
+        </button>
+        <button onclick="lockDashboard()" class="text-xs px-3 py-1.5 rounded-full bg-[#640e1b]/10 text-[#640e1b] hover:bg-[#640e1b] hover:text-white transition-all font-semibold">
+          Lock
+        </button>
+      </div>
+    </header>
+
+    <!-- Header Card -->
+    <div class="text-center mb-6">
+      <h1 class="font-cinzel text-xl sm:text-2xl font-bold tracking-[0.16em] text-[#640e1b] uppercase">
+        Guestbook Moderation
+      </h1>
+      <p class="font-lora text-xs sm:text-sm text-[#ab7a45] tracking-wider mt-1">
+        Chandru & Impu Wedding Blessings
+      </p>
+
+      <!-- Status Bar -->
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 shadow-xs font-montserrat font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 pulse-dot"></span>
+          <span>Live Cloud Sync Active</span>
+        </div>
+
+        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#640e1b]/10 text-[#640e1b] font-medium font-montserrat">
+          <span>Total Wishes:</span>
+          <strong id="wishes-count" class="font-bold">0</strong>
+        </div>
+
+        <button 
+          onclick="fetchWishes(true)" 
+          id="refresh-btn"
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#640e1b] text-white hover:bg-[#40000a] transition-all shadow-xs font-semibold"
+        >
+          <svg id="refresh-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 -translate-y-4">
+      <div class="px-5 py-2.5 rounded-full bg-[#640e1b] text-white text-xs sm:text-sm font-semibold shadow-lg border border-[#dfba87]/60 flex items-center gap-2">
+        <span id="toast-text">Message</span>
+      </div>
+    </div>
+
+    <!-- Wishes List Container -->
+    <div id="wishes-container" class="space-y-3.5">
+      <!-- Populated via JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-12 px-4 rounded-2xl bg-white/60 border border-[#ab7a45]/30">
+      <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#640e1b]/10 flex items-center justify-center text-[#640e1b]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+      </div>
+      <h3 class="font-cinzel text-sm sm:text-base font-bold text-[#640e1b]">No Wishes Yet</h3>
+      <p class="font-lora text-xs text-[#ab7a45] mt-1 max-w-sm mx-auto">
+        When guests submit wishes from their phones, they will appear here in real time.
+      </p>
+    </div>
+
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- 3. JAVASCRIPT LOGIC                                      -->
+  <!-- ======================================================== -->
+  <script>
+    const CLOUD_ENDPOINT = 'https://kvdb.io/FS1ktdd75SfK9mmRbHSg1g/chandru_impu_wishes';
+    const DEFAULT_PIN = '2026';
+
+    let allWishes = [];
+
+    // --- Authentication ---
+    function getStoredPin() {
+      return localStorage.getItem('jeevs_admin_pin') || DEFAULT_PIN;
+    }
+
+    function checkAuth() {
+      const isAuth = sessionStorage.getItem('jeevs_auth') === 'true';
+      const pinScreen = document.getElementById('pin-screen');
+      const dashboard = document.getElementById('dashboard');
+
+      if (isAuth) {
+        pinScreen.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        fetchWishes();
+      } else {
+        pinScreen.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+        document.getElementById('admin-pin').focus();
+      }
+    }
+
+    function handlePinSubmit(e) {
+      e.preventDefault();
+      const enteredPin = document.getElementById('admin-pin').value.trim();
+      const correctPin = getStoredPin();
+      const err = document.getElementById('pin-error');
+
+      if (enteredPin === correctPin) {
+        err.classList.add('hidden');
+        sessionStorage.setItem('jeevs_auth', 'true');
+        checkAuth();
+        showToast("Welcome Jeevs! Dashboard unlocked.");
+      } else {
+        err.classList.remove('hidden');
+        document.getElementById('admin-pin').value = '';
+        document.getElementById('admin-pin').focus();
+      }
+    }
+
+    function lockDashboard() {
+      sessionStorage.removeItem('jeevs_auth');
+      checkAuth();
+    }
+
+    function promptChangePin() {
+      const current = prompt("Enter current PIN:");
+      if (current !== getStoredPin()) {
+        alert("Incorrect current PIN.");
+        return;
+      }
+      const newPin = prompt("Enter new PIN (4 to 8 digits):");
+      if (!newPin || newPin.trim().length < 4) {
+        alert("PIN must be at least 4 digits.");
+        return;
+      }
+      localStorage.setItem('jeevs_admin_pin', newPin.trim());
+      alert("PIN updated successfully! Your new PIN is: " + newPin.trim());
+    }
+
+    // --- Data Management ---
+    async function fetchWishes(showNotification = false) {
+      const refreshIcon = document.getElementById('refresh-icon');
+      if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+      try {
+        const res = await fetch(CLOUD_ENDPOINT + '?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          allWishes = Array.isArray(data) ? data : [];
+          localStorage.setItem('chandru_impu_wishes', JSON.stringify(allWishes));
+        } else {
+          // Fallback to local storage if network glitch
+          allWishes = JSON.parse(localStorage.getItem('chandru_impu_wishes') || '[]');
+        }
+      } catch (err) {
+        console.error('Error fetching wishes:', err);
+        allWishes = JSON.parse(localStorage.getItem('chandru_impu_wishes') || '[]');
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove('animate-spin');
+        renderWishes();
+        if (showNotification) showToast("Wishes updated from cloud");
+      }
+    }
+
+    function renderWishes() {
+      const container = document.getElementById('wishes-container');
+      const emptyState = document.getElementById('empty-state');
+      const countBadge = document.getElementById('wishes-count');
+
+      countBadge.innerText = allWishes.length;
+
+      if (!allWishes || allWishes.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      container.innerHTML = '';
+
+      allWishes.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.id = 'wish-card-' + (item.id || index);
+        card.className = 'p-4 sm:p-5 rounded-2xl bg-white/90 border border-[#ab7a45]/30 shadow-xs text-left transition-all hover:shadow-md';
+        
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-cinzel text-sm sm:text-base font-bold text-[#640e1b]">
+                ${escapeHtml(item.name || 'Anonymous Guest')}
+              </h3>
+              <p class="font-montserrat text-[11px] text-[#ab7a45] mt-0.5">
+                ${escapeHtml(item.time || 'Recently')}
+              </p>
+            </div>
+
+            <button 
+              type="button" 
+              onclick="confirmDeleteWish('${escapeHtml(item.id || '')}', '${escapeHtml(item.name || '')}', ${index})"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-50 text-red-700 hover:bg-red-600 hover:text-white border border-red-200 transition-all text-xs font-semibold cursor-pointer shrink-0 shadow-2xs active:scale-95"
+              title="Delete this wish"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+              <span>Delete</span>
+            </button>
+          </div>
+
+          <p class="font-lora text-xs sm:text-sm text-[#640e1b]/90 leading-relaxed mt-3 pt-2.5 border-t border-[#ab7a45]/20">
+            ${escapeHtml(item.wish || '')}
+          </p>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    async function confirmDeleteWish(wishId, guestName, index) {
+      const displayName = guestName || "this guest";
+      const confirmDelete = window.confirm(`Are you sure you want to delete the wish from "${displayName}"?`);
+      if (!confirmDelete) return;
+
+      // Filter out wish
+      if (wishId) {
+        allWishes = allWishes.filter(w => w.id !== wishId);
+      } else {
+        allWishes.splice(index, 1);
+      }
+
+      // Optimistically update UI
+      renderWishes();
+      showToast(`Deleting wish from ${displayName}...`);
+
+      try {
+        const res = await fetch(CLOUD_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(allWishes)
+        });
+
+        if (res.ok) {
+          localStorage.setItem('chandru_impu_wishes', JSON.stringify(allWishes));
+          showToast(`Wish deleted successfully.`);
+        } else {
+          showToast(`Error updating cloud. Retrying...`);
+          fetchWishes();
+        }
+      } catch (err) {
+        console.error('Failed to sync deletion:', err);
+        showToast(`Deletion saved locally.`);
+      }
+    }
+
+    // --- Toast Helper ---
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      if (!toast || !toastText) return;
+
+      toastText.innerText = msg;
+      toast.classList.remove('opacity-0', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-4');
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[m];
+      });
+    }
+
+    // --- Init ---
+    window.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      // Auto-poll every 6 seconds while dashboard is open
+      setInterval(() => {
+        if (sessionStorage.getItem('jeevs_auth') === 'true') {
+          fetchWishes();
+        }
+      }, 6000);
+    });
+  </script>
+</body>
+</html>
