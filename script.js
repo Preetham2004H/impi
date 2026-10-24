@@ -355,7 +355,50 @@ let lastScrollTime = null;
 let isGalleryShowcaseActive = false;
 let galleryShowcaseDone = false;
 let gallerySlideCount = 0;
-let galleryShowcaseStartTime = null;
+let galleryCycleTimer = null;
+
+function getGalleryCenterScroll() {
+  const galleryEl = document.getElementById('gallery-section');
+  if (!galleryEl) return 0;
+  const rect = galleryEl.getBoundingClientRect();
+  const currentY = window.scrollY !== undefined ? window.scrollY : document.documentElement.scrollTop;
+  return Math.max(0, currentY + rect.top - Math.max(20, (window.innerHeight - rect.height) / 2));
+}
+
+function startGalleryShowcaseCycle() {
+  if (galleryCycleTimer) clearInterval(galleryCycleTimer);
+  gallerySlideCount = 0;
+
+  if (gallerySwiper && gallerySwiper.autoplay) {
+    gallerySwiper.autoplay.stop();
+  }
+
+  galleryCycleTimer = setInterval(() => {
+    // If user interrupted or auto-scroll paused, stop
+    if (!isGalleryShowcaseActive || !isAutoScrollActive) {
+      clearInterval(galleryCycleTimer);
+      galleryCycleTimer = null;
+      return;
+    }
+
+    if (gallerySwiper) {
+      // Rapid, smooth 380ms slide transition
+      gallerySwiper.slideNext(380);
+    }
+    gallerySlideCount++;
+
+    // When all photos complete one full cycle (6 photos)
+    if (gallerySlideCount >= 6) {
+      clearInterval(galleryCycleTimer);
+      galleryCycleTimer = null;
+      galleryShowcaseDone = true;
+      isGalleryShowcaseActive = false;
+      if (gallerySwiper && gallerySwiper.autoplay) {
+        gallerySwiper.autoplay.start();
+      }
+    }
+  }, 1300); // 1.3 seconds per photo (fast leftward slide rate)
+}
 
 // User Interrupt State (40-second pause)
 let userInterruptTimer = null;
@@ -363,6 +406,12 @@ const USER_INTERRUPT_PAUSE_MS = 40000; // 40 seconds
 
 function handleUserInterrupt() {
   if (!isEnvelopeOpened) return;
+
+  if (galleryCycleTimer) {
+    clearInterval(galleryCycleTimer);
+    galleryCycleTimer = null;
+  }
+  isGalleryShowcaseActive = false;
 
   // If lightbox is currently open, don't schedule auto-scroll resume yet
   if (lightbox && !lightbox.classList.contains('hidden')) {
@@ -430,34 +479,17 @@ function toggleAutoScroll() {
   }
 }
 
-function checkGalleryShowcase(timestamp) {
-  if (galleryShowcaseDone) return;
+function checkGalleryShowcase(currentScroll) {
+  if (galleryShowcaseDone || isGalleryShowcaseActive) return;
   const galleryEl = document.getElementById('gallery-section');
   if (!galleryEl) return;
 
-  const rect = galleryEl.getBoundingClientRect();
-  // When gallery is nicely centered in the upper/middle viewport
-  const isCentered = rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.55;
-
-  if (isCentered) {
-    if (!isGalleryShowcaseActive) {
-      isGalleryShowcaseActive = true;
-      gallerySlideCount = 0;
-      galleryShowcaseStartTime = timestamp;
-      if (gallerySwiper && gallerySwiper.autoplay && !gallerySwiper.autoplay.running) {
-        gallerySwiper.autoplay.start();
-      }
-    } else {
-      // Safeguard: after 10.5 seconds (plenty of time for 5 photos at 1.8s each), resume normal scroll
-      if (galleryShowcaseStartTime && (timestamp - galleryShowcaseStartTime) > 10500) {
-        galleryShowcaseDone = true;
-        isGalleryShowcaseActive = false;
-      }
-    }
-  } else if (rect.top < -rect.height * 0.5) {
-    // If scrolled past the gallery section
-    galleryShowcaseDone = true;
-    isGalleryShowcaseActive = false;
+  const targetY = getGalleryCenterScroll();
+  // When scrolling down reaches the centered position of the gallery
+  if (currentScroll >= targetY - 12 && currentScroll <= targetY + 120) {
+    window.scrollTo(0, targetY);
+    isGalleryShowcaseActive = true;
+    startGalleryShowcaseCycle();
   }
 }
 
@@ -470,14 +502,15 @@ function runScrollLoop(timestamp) {
   const deltaSeconds = Math.min((timestamp - lastScrollTime) / 1000.0, 0.08);
   lastScrollTime = timestamp;
 
-  checkGalleryShowcase(timestamp);
-
-  // Slow down to 12 px/sec when showcasing the photo gallery; otherwise 80 px/sec
-  const currentSpeed = isGalleryShowcaseActive ? GALLERY_SLOW_SPEED_PX_PER_SEC : SCROLL_SPEED_PX_PER_SEC;
-
   const scrollTarget = document.scrollingElement || document.documentElement || document.body;
-  const maxScroll = Math.max(0, scrollTarget.scrollHeight - window.innerHeight);
   const currentScroll = window.scrollY !== undefined ? window.scrollY : (window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop);
+
+  checkGalleryShowcase(currentScroll);
+
+  // Vertical scroll completely pauses (0 px/sec) while photos cycle through; otherwise 80 px/sec
+  const currentSpeed = isGalleryShowcaseActive ? 0 : SCROLL_SPEED_PX_PER_SEC;
+
+  const maxScroll = Math.max(0, scrollTarget.scrollHeight - window.innerHeight);
 
   // Continuously scroll downward
   if (currentScroll < maxScroll - 4) {
@@ -882,17 +915,6 @@ function initGallerySwiper() {
     },
     slideToClickedSlide: true,
     watchSlidesProgress: true,
-  });
-
-  // Track slide transitions during Gallery Showcase
-  gallerySwiper.on('slideChange', () => {
-    if (isGalleryShowcaseActive && !galleryShowcaseDone) {
-      gallerySlideCount++;
-      if (gallerySlideCount >= 5) {
-        galleryShowcaseDone = true;
-        isGalleryShowcaseActive = false;
-      }
-    }
   });
 
   // Clicking the active centered slide opens lightbox; clicking side slides brings them to center
