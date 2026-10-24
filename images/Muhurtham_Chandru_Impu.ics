@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Chandru and Impu Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:wedding-muhurta-2026@chandru-impu.wedding
+DTSTAMP:20261024T103000Z
+DTSTART:20261129T013000Z
+DTEND:20261129T021000Z
+SUMMARY:Wedding Muhurtham | Chandrashekar Gowda M & Impu L
+DESCRIPTION:Auspicious Muhurtham of Chandrashekar Gowda M & Impu L (7:00 AM - 7:40 AM)\nSunday, November 29, 2026\nVenue: NANDHANA CONVENTION HALL, Bengaluru
+LOCATION:NANDHANA CONVENTION HALL, Ullal Main Rd, Jnananjyothinagar, Bengaluru, Karnataka 560056
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR

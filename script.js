@@ -411,10 +411,10 @@ function runScrollLoop(timestamp) {
 
 // --- 5. Real-Time Countdown Timers ---
 // Targets:
-// Reception: Saturday, November 28, 2026, 19:00:00 IST
-// Muhurtham: Sunday, November 29, 2026, 09:15:00 IST
+// Reception: Saturday, November 28, 2026, 7:00 PM IST
+// Muhurtham: Sunday, November 29, 2026, 7:00 AM IST
 const weddingDate = new Date('2026-11-28T19:00:00+05:30').getTime();
-const muhurtaDate = new Date('2026-11-29T09:15:00+05:30').getTime();
+const muhurtaDate = new Date('2026-11-29T07:00:00+05:30').getTime();
 
 function formatTimeRemaining(diff) {
   if (diff <= 0) {
@@ -468,12 +468,12 @@ function downloadCalendarInvite(type) {
     title = 'Wedding Reception | Chandrashekar Gowda M & Impu L';
     start = '20261128T133000Z'; // Nov 28, 7:00 PM IST (13:30 UTC)
     end = '20261128T173000Z';   // Nov 28, 11:00 PM IST (17:30 UTC)
-    description = 'Wedding Reception of Chandrashekar Gowda M & Impu L\\nSaturday, November 28, 2026 • 7:00 PM (19:00)\\nVenue: NANDHANA CONVENTION HALL, Bengaluru';
+    description = 'Wedding Reception of Chandrashekar Gowda M & Impu L\\nSaturday, November 28, 2026 • 7:00 PM\\nVenue: NANDHANA CONVENTION HALL, Bengaluru';
   } else {
     title = 'Wedding Muhurtham | Chandrashekar Gowda M & Impu L';
-    start = '20261129T034500Z'; // Nov 29, 9:15 AM IST (03:45 UTC)
-    end = '20261129T074500Z';   // Nov 29, 1:15 PM IST (07:45 UTC)
-    description = 'Auspicious Muhurtham of Chandrashekar Gowda M & Impu L (9:15 AM)\\nSunday, November 29, 2026\\nVenue: NANDHANA CONVENTION HALL, Bengaluru';
+    start = '20261129T013000Z'; // Nov 29, 7:00 AM IST (01:30 UTC)
+    end = '20261129T021000Z';   // Nov 29, 7:40 AM IST (02:10 UTC)
+    description = 'Auspicious Muhurtham of Chandrashekar Gowda M & Impu L (7:00 AM - 7:40 AM)\\nSunday, November 29, 2026\\nVenue: NANDHANA CONVENTION HALL, Bengaluru';
   }
   const location = 'NANDHANA CONVENTION HALL, Ullal Main Rd, Jnananjyothinagar, Bengaluru, Karnataka 560056';
 
