@@ -342,17 +342,15 @@ function toggleMusic() {
   }
 }
 
-// --- 4. Smart Autoscroll Engine (Safari & Cross-Browser Fluid Scroll) ---
-// Exactly 2x the original reading speed (original ~55 px/sec -> now 110 px/sec)
+// --- 4. Continuous Fluid Autoscroll Engine (Uninterrupted & Smooth) ---
+// Speed: 110 pixels per second (~1.83px per frame at 60Hz, 2x original speed)
 const SCROLL_SPEED_PX_PER_SEC = 110;
 let scrollAccumulator = 0.0;
 let lastScrollTime = null;
-let userInteractionTimeout = null;
 
 function startAutoScroll() {
   if (isAutoScrollActive) return;
   isAutoScrollActive = true;
-  isUserInteracting = false;
   scrollAccumulator = 0.0;
   lastScrollTime = null;
 
@@ -386,76 +384,37 @@ function runScrollLoop(timestamp) {
   if (lastScrollTime === null) {
     lastScrollTime = timestamp;
   }
-  // Clamp delta to prevent sudden jump if tab is switched
+  // Clamp delta to prevent sudden jump if tab is switched/backgrounded
   const deltaSeconds = Math.min((timestamp - lastScrollTime) / 1000.0, 0.08);
   lastScrollTime = timestamp;
 
-  if (!isUserInteracting) {
-    const scrollTarget = document.scrollingElement || document.documentElement || document.body;
-    const maxScroll = Math.max(0, scrollTarget.scrollHeight - window.innerHeight);
-    const currentScroll = window.scrollY !== undefined ? window.scrollY : (window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop);
+  const scrollTarget = document.scrollingElement || document.documentElement || document.body;
+  const maxScroll = Math.max(0, scrollTarget.scrollHeight - window.innerHeight);
+  const currentScroll = window.scrollY !== undefined ? window.scrollY : (window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop);
 
-    // Only scroll downward if not already at the bottom
-    if (currentScroll < maxScroll - 4) {
-      // Time-based smooth accumulator: exactly 110px/sec on all refresh rates (60Hz, 120Hz ProMotion)
-      scrollAccumulator += SCROLL_SPEED_PX_PER_SEC * deltaSeconds;
+  // Continuously scroll downward without unexpected pausing
+  if (currentScroll < maxScroll - 4) {
+    scrollAccumulator += SCROLL_SPEED_PX_PER_SEC * deltaSeconds;
 
-      // Issue discrete integer scroll steps so Safari/WebKit never truncates to 0
-      if (scrollAccumulator >= 1.0) {
-        const step = Math.floor(scrollAccumulator);
-        scrollAccumulator -= step;
+    // Issue discrete integer scroll steps so Safari WebKit never truncates to 0
+    if (scrollAccumulator >= 1.0) {
+      const step = Math.floor(scrollAccumulator);
+      scrollAccumulator -= step;
 
-        const prevScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
-        window.scrollBy(0, step);
-        const newScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
+      const prevScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
+      window.scrollBy(0, step);
+      const newScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
 
-        // WebKit/Safari fallback: if window.scrollBy was suppressed, directly increment scrollTop
-        if (newScroll === prevScroll) {
-          scrollTarget.scrollTop = prevScroll + step;
-        }
+      // WebKit/Safari fallback: if window.scrollBy was suppressed, directly increment scrollTop
+      if (newScroll === prevScroll) {
+        scrollTarget.scrollTop = prevScroll + step;
       }
     }
   }
 
-  // Keep RAF loop alive continuously so scrolling resumes instantly when user scrolls back up
+  // Keep RAF loop alive continuously so scrolling never dies or gets stuck
   autoScrollRafId = requestAnimationFrame(runScrollLoop);
 }
-
-// User Interaction Detection (Touch, Wheel, Drag)
-// While the user is holding or dragging their finger, pause scrolling.
-// Smoothly resumes 1.2s after user releases touch or stops scrolling.
-function onUserTouchStart() {
-  if (!isAutoScrollActive) return;
-  isUserInteracting = true;
-  clearTimeout(userInteractionTimeout);
-}
-
-function onUserTouchEnd() {
-  if (!isAutoScrollActive) return;
-  clearTimeout(userInteractionTimeout);
-  userInteractionTimeout = setTimeout(() => {
-    isUserInteracting = false;
-    scrollAccumulator = 0.0;
-    lastScrollTime = null; // Reset delta so it resumes seamlessly without jump
-  }, 1200);
-}
-
-window.addEventListener('touchstart', onUserTouchStart, { passive: true });
-window.addEventListener('touchmove', onUserTouchStart, { passive: true });
-window.addEventListener('touchend', onUserTouchEnd, { passive: true });
-window.addEventListener('touchcancel', onUserTouchEnd, { passive: true });
-
-// Mouse wheel / trackpad scroll
-window.addEventListener('wheel', () => {
-  if (!isAutoScrollActive) return;
-  isUserInteracting = true;
-  clearTimeout(userInteractionTimeout);
-  userInteractionTimeout = setTimeout(() => {
-    isUserInteracting = false;
-    scrollAccumulator = 0.0;
-    lastScrollTime = null;
-  }, 1200);
-}, { passive: true });
 
 // --- 5. Real-Time Countdown Timers ---
 // Targets:
