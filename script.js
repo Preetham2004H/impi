@@ -401,14 +401,7 @@ function runScrollLoop(timestamp) {
       const step = Math.floor(scrollAccumulator);
       scrollAccumulator -= step;
 
-      const prevScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
       window.scrollBy(0, step);
-      const newScroll = window.scrollY !== undefined ? window.scrollY : scrollTarget.scrollTop;
-
-      // WebKit/Safari fallback: if window.scrollBy was suppressed, directly increment scrollTop
-      if (newScroll === prevScroll) {
-        scrollTarget.scrollTop = prevScroll + step;
-      }
     }
   }
 

@@ -14,5 +14,8 @@
     "cloudflare-pages"
   ],
   "author": "Antigravity",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "playwright-core": "^1.64.1"
+  }
 }
