@@ -350,7 +350,7 @@
     <!-- ======================================================== -->
     <!-- 5b. RECEPTION SECTION (WITH BGI3)                        -->
     <!-- ======================================================== -->
-    <section id="reception-section" class="relative w-full overflow-hidden pt-16 sm:pt-20 pb-10 sm:pb-12 px-4 sm:px-6 text-center" style="background-image: url('images/bgi3_hd.png'); background-size: 100% 100%; background-position: center top; background-repeat: no-repeat;">
+    <section id="reception-section" class="relative w-full overflow-hidden pt-16 sm:pt-20 pb-14 sm:pb-16 px-4 sm:px-6 text-center" style="background-image: url('images/bgi3_hd.png'); background-size: 100% 100%; background-position: center top; background-repeat: no-repeat;">
       
       <!-- Inner Content Container -->
       <div class="relative z-10 max-w-sm sm:max-w-md mx-auto">
@@ -406,7 +406,7 @@
         </div>
 
         <!-- Ornate Filigree Calendar Container (Exact Reference Style - No White Box) -->
-        <div class="relative mx-auto w-full max-w-[320px] sm:max-w-[350px] aspect-square flex flex-col justify-center items-center p-6 sm:p-7 select-none mt-2">
+        <div class="relative mx-auto w-full max-w-[340px] sm:max-w-[370px] aspect-[825/756] flex flex-col justify-center items-center px-6 py-6 sm:px-8 sm:py-7 select-none mt-2">
           
           <!-- Ornate Gold Filigree Border Image -->
           <img src="images/calendar_ornate_frame_hd.png" alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none z-10 drop-shadow-xs" />
@@ -465,17 +465,18 @@
           </div>
         </div>
 
-        <!-- Add to Calendar Link & Confirm Attendance Button (Exact Reference Style) -->
-        <div class="mt-4 flex flex-col items-center justify-center gap-2">
-          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Reception+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261128T133000Z%2F20261128T173000Z&ctz=Asia%2FKolkata&details=Wedding+Reception+of+Chandrashekar+Gowda+M+%26+Impu+L%0ASaturday%2C+November+28%2C+2026+%E2%80%A2+7%3A00+PM+%2819%3A00%29%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="font-lora text-xs sm:text-sm text-[#ab7a45] underline underline-offset-4 hover:text-[#640e1b] transition-colors font-medium">
-            Add to Calendar
+        <!-- Add to Calendar Maroon Pill Button & Apple Calendar Download -->
+        <div class="mt-5 flex flex-col items-center justify-center gap-2">
+          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Reception+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261128T133000Z%2F20261128T173000Z&ctz=Asia%2FKolkata&details=Wedding+Reception+of+Chandrashekar+Gowda+M+%26+Impu+L%0ASaturday%2C+November+28%2C+2026+%E2%80%A2+7%3A00+PM+%2819%3A00%29%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 sm:px-11 py-3 sm:py-3.5 rounded-full bg-gradient-to-r from-[#640e1b] via-[#4d000d] to-[#640e1b] text-[#fff8f0] font-cinzel text-xs sm:text-[13px] font-bold tracking-[0.18em] uppercase hover:scale-105 active:scale-95 transition-all shadow-[0_4px_18px_rgba(77,0,13,0.45)] border border-[#ab7a45]/50 group">
+            <span class="flex items-center gap-2">
+              <span>ADD TO CALENDAR</span>
+              <svg class="w-3.5 h-3.5 text-[#dfba87] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </span>
           </a>
 
-          <a href="#wish-form" class="inline-flex items-center justify-center px-8 sm:px-10 py-2.5 rounded-full bg-gradient-to-r from-[#640e1b] via-[#4d000d] to-[#640e1b] text-[#fff8f0] font-cinzel text-xs sm:text-[13px] font-bold tracking-[0.16em] uppercase hover:scale-105 active:scale-95 transition-all shadow-[0_4px_16px_rgba(77,0,13,0.4)] border border-[#ab7a45]/40 mt-1">
-            CONFIRM ATTENDANCE
-          </a>
-
-          <button type="button" onclick="downloadCalendarInvite('reception')" class="text-[10px] sm:text-[11px] font-lora text-[#640e1b]/60 hover:text-[#640e1b] underline underline-offset-2 transition-colors cursor-pointer mt-1">
+          <button type="button" onclick="downloadCalendarInvite('reception')" class="text-[11px] sm:text-xs font-lora text-[#ab7a45] hover:text-[#640e1b] underline underline-offset-4 transition-colors cursor-pointer mt-1">
             Download for Apple Calendar / iCal (.ics)
           </button>
         </div>
@@ -487,7 +488,7 @@
     <!-- ======================================================== -->
     <!-- 5c. MUHURTAM SECTION (WITH BGI3)                         -->
     <!-- ======================================================== -->
-    <section id="muhurta-section" class="relative w-full overflow-hidden pt-16 sm:pt-20 pb-10 sm:pb-12 px-4 sm:px-6 text-center" style="background-image: url('images/bgi3_hd.png'); background-size: 100% 100%; background-position: center top; background-repeat: no-repeat;">
+    <section id="muhurta-section" class="relative w-full overflow-hidden pt-16 sm:pt-20 pb-14 sm:pb-16 px-4 sm:px-6 text-center" style="background-image: url('images/bgi3_hd.png'); background-size: 100% 100%; background-position: center top; background-repeat: no-repeat;">
       
       <!-- Inner Content Container -->
       <div class="relative z-10 max-w-sm sm:max-w-md mx-auto">
@@ -538,7 +539,7 @@
         </div>
 
         <!-- Ornate Filigree Calendar Container (Exact Reference Style - No White Box) -->
-        <div class="relative mx-auto w-full max-w-[320px] sm:max-w-[350px] aspect-square flex flex-col justify-center items-center p-6 sm:p-7 select-none mt-2">
+        <div class="relative mx-auto w-full max-w-[340px] sm:max-w-[370px] aspect-[825/756] flex flex-col justify-center items-center px-6 py-6 sm:px-8 sm:py-7 select-none mt-2">
           
           <!-- Ornate Gold Filigree Border Image -->
           <img src="images/calendar_ornate_frame_hd.png" alt="" class="absolute inset-0 w-full h-full object-contain pointer-events-none z-10 drop-shadow-xs" />
@@ -596,17 +597,18 @@
           </div>
         </div>
 
-        <!-- Add to Calendar Link & Confirm Attendance Button (Exact Reference Style) -->
-        <div class="mt-4 flex flex-col items-center justify-center gap-2">
-          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Muhurtham+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261129T034500Z%2F20261129T074500Z&ctz=Asia%2FKolkata&details=Auspicious+Muhurtham+of+Chandrashekar+Gowda+M+%26+Impu+L+%289%3A15+AM%29%0ASunday%2C+November+29%2C+2026%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="font-lora text-xs sm:text-sm text-[#ab7a45] underline underline-offset-4 hover:text-[#640e1b] transition-colors font-medium">
-            Add to Calendar
+        <!-- Add to Calendar Maroon Pill Button & Apple Calendar Download -->
+        <div class="mt-5 flex flex-col items-center justify-center gap-2">
+          <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Wedding+Muhurtham+%7C+Chandrashekar+Gowda+M+%26+Impu+L&dates=20261129T034500Z%2F20261129T074500Z&ctz=Asia%2FKolkata&details=Auspicious+Muhurtham+of+Chandrashekar+Gowda+M+%26+Impu+L+%289%3A15+AM%29%0ASunday%2C+November+29%2C+2026%0AVenue%3A+NANDHANA+CONVENTION+HALL%2C+Bengaluru&location=NANDHANA+CONVENTION+HALL%2C+Ullal+Main+Rd%2C+Jnananjyothinagar%2C+Bengaluru%2C+Karnataka+560056" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 sm:px-11 py-3 sm:py-3.5 rounded-full bg-gradient-to-r from-[#640e1b] via-[#4d000d] to-[#640e1b] text-[#fff8f0] font-cinzel text-xs sm:text-[13px] font-bold tracking-[0.18em] uppercase hover:scale-105 active:scale-95 transition-all shadow-[0_4px_18px_rgba(77,0,13,0.45)] border border-[#ab7a45]/50 group">
+            <span class="flex items-center gap-2">
+              <span>ADD TO CALENDAR</span>
+              <svg class="w-3.5 h-3.5 text-[#dfba87] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </span>
           </a>
 
-          <a href="#wish-form" class="inline-flex items-center justify-center px-8 sm:px-10 py-2.5 rounded-full bg-gradient-to-r from-[#640e1b] via-[#4d000d] to-[#640e1b] text-[#fff8f0] font-cinzel text-xs sm:text-[13px] font-bold tracking-[0.16em] uppercase hover:scale-105 active:scale-95 transition-all shadow-[0_4px_16px_rgba(77,0,13,0.4)] border border-[#ab7a45]/40 mt-1">
-            CONFIRM ATTENDANCE
-          </a>
-
-          <button type="button" onclick="downloadCalendarInvite('muhurta')" class="text-[10px] sm:text-[11px] font-lora text-[#640e1b]/60 hover:text-[#640e1b] underline underline-offset-2 transition-colors cursor-pointer mt-1">
+          <button type="button" onclick="downloadCalendarInvite('muhurta')" class="text-[11px] sm:text-xs font-lora text-[#ab7a45] hover:text-[#640e1b] underline underline-offset-4 transition-colors cursor-pointer mt-1">
             Download for Apple Calendar / iCal (.ics)
           </button>
         </div>
