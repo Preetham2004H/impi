@@ -342,17 +342,46 @@ function toggleMusic() {
   }
 }
 
-// --- 4. Smart Autoscroll Engine ---
+// --- 4. Smart Universal Autoscroll Engine (Cross-Browser & Safari iOS Optimized) ---
 const btnAutoScroll = document.getElementById('btn-autoscroll');
 const autoscrollIcon = document.getElementById('autoscroll-icon');
 const autoscrollRing = document.getElementById('autoscroll-ring');
 
+// Faster, comfortable reading speed: ~135 pixels per second (~2.25px per frame at 60Hz)
+const AUTO_SCROLL_SPEED_PX_PER_SEC = 135;
+let lastScrollTimestamp = null;
+let scrollSubpixelAccumulator = 0.0;
+
+function updateAutoScrollUI(active) {
+  const icon = document.getElementById('autoscroll-icon') || autoscrollIcon;
+  const ring = document.getElementById('autoscroll-ring') || autoscrollRing;
+  const btn = document.getElementById('btn-autoscroll') || btnAutoScroll;
+
+  if (icon) {
+    icon.textContent = active ? '⏸' : '▶';
+  }
+  if (ring) {
+    if (active) ring.classList.remove('hidden');
+    else ring.classList.add('hidden');
+  }
+  if (btn) {
+    btn.setAttribute('aria-label', active ? 'Pause Auto-Scroll' : 'Resume Auto-Scroll');
+    btn.title = active ? 'Pause Auto-Scroll' : 'Resume Auto-Scroll';
+  }
+}
+
 function startAutoScroll() {
   if (isAutoScrollActive) return;
   isAutoScrollActive = true;
-  if (autoscrollIcon) autoscrollIcon.textContent = '❚❚';
-  if (autoscrollRing) autoscrollRing.classList.remove('hidden');
-  runScrollLoop();
+  isUserInteracting = false;
+  scrollSubpixelAccumulator = 0.0;
+  lastScrollTimestamp = null;
+  updateAutoScrollUI(true);
+
+  if (autoScrollRafId) {
+    cancelAnimationFrame(autoScrollRafId);
+  }
+  autoScrollRafId = requestAnimationFrame(runScrollLoop);
 }
 
 function pauseAutoScroll() {
@@ -361,8 +390,8 @@ function pauseAutoScroll() {
     cancelAnimationFrame(autoScrollRafId);
     autoScrollRafId = null;
   }
-  if (autoscrollIcon) autoscrollIcon.textContent = '▶';
-  if (autoscrollRing) autoscrollRing.classList.add('hidden');
+  lastScrollTimestamp = null;
+  updateAutoScrollUI(false);
 }
 
 function toggleAutoScroll() {
@@ -373,43 +402,69 @@ function toggleAutoScroll() {
   }
 }
 
-function runScrollLoop() {
+function runScrollLoop(timestamp) {
   if (!isAutoScrollActive) return;
 
-  if (!isUserInteracting) {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const currentScroll = window.scrollY || window.pageYOffset;
+  if (lastScrollTimestamp === null) {
+    lastScrollTimestamp = timestamp;
+  }
+  // Clamp delta to avoid big jumps if user switches tabs (max 0.08 sec)
+  const deltaSeconds = Math.min((timestamp - lastScrollTimestamp) / 1000.0, 0.08);
+  lastScrollTimestamp = timestamp;
 
-    if (currentScroll >= maxScroll - 3) {
+  if (!isUserInteracting) {
+    const scrollTarget = document.scrollingElement || document.documentElement || document.body;
+    const maxScroll = Math.max(
+      0,
+      scrollTarget.scrollHeight - (window.innerHeight || document.documentElement.clientHeight)
+    );
+    const currentScroll = window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop;
+
+    // Check if reached bottom of page
+    if (currentScroll >= maxScroll - 6) {
       pauseAutoScroll();
       return;
     }
 
-    // Gentle reading scroll speed (~0.85px per frame)
-    window.scrollBy(0, 0.85);
+    // Time-based smooth accumulator:
+    // Guarantees exact same smooth speed on 60Hz, 90Hz, and 120Hz ProMotion screens (iPhone/iPad)
+    scrollSubpixelAccumulator += AUTO_SCROLL_SPEED_PX_PER_SEC * deltaSeconds;
+    const stepPixels = Math.floor(scrollSubpixelAccumulator);
+
+    if (stepPixels >= 1) {
+      scrollSubpixelAccumulator -= stepPixels;
+
+      // 1. Primary scroll method: window.scrollBy
+      const prevPos = window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop;
+      window.scrollBy(0, stepPixels);
+      const newPos = window.pageYOffset !== undefined ? window.pageYOffset : scrollTarget.scrollTop;
+
+      // 2. Safari WebKit Fallback:
+      // If Safari ignored window.scrollBy or rounded down, directly advance scrollingElement
+      if (newPos === prevPos) {
+        scrollTarget.scrollTop = prevPos + stepPixels;
+      }
+    }
   }
 
   autoScrollRafId = requestAnimationFrame(runScrollLoop);
 }
 
-// Mobile Touch Detection: Pause immediately on thumb touch
-['touchstart', 'wheel', 'pointerdown'].forEach((evtName) => {
-  window.addEventListener(evtName, () => {
-    if (!isAutoScrollActive) return;
-    isUserInteracting = true;
-    clearTimeout(touchPauseTimeout);
-  }, { passive: true });
-});
+// User Interaction Detection (Touch, Wheel, Drag)
+// Gently pauses autoscroll when user is reading or swiping, then automatically resumes after 2.5s
+function handleUserTouchOrScroll() {
+  if (!isAutoScrollActive) return;
+  isUserInteracting = true;
+  clearTimeout(touchPauseTimeout);
 
-['touchend', 'pointerup', 'pointercancel'].forEach((evtName) => {
-  window.addEventListener(evtName, () => {
-    if (!isAutoScrollActive) return;
-    clearTimeout(touchPauseTimeout);
-    // Smoothly resume 3 seconds after thumb release
-    touchPauseTimeout = setTimeout(() => {
-      isUserInteracting = false;
-    }, 3000);
-  }, { passive: true });
+  touchPauseTimeout = setTimeout(() => {
+    isUserInteracting = false;
+    lastScrollTimestamp = null; // Reset delta so it resumes seamlessly without jump
+  }, 2500);
+}
+
+['touchstart', 'touchmove', 'wheel'].forEach((evt) => {
+  window.addEventListener(evt, handleUserTouchOrScroll, { passive: true });
 });
 
 // --- 5. Real-Time Countdown Timers ---

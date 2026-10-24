@@ -716,7 +716,13 @@
   <!-- ======================================================== -->
   <!-- 9. FLOATING SOUND CONTROL (Mute / Unmute)                -->
   <!-- ======================================================== -->
-  <div id="floating-controls" class="fixed bottom-6 right-4 sm:right-6 z-40 transition-opacity duration-500 opacity-0 pointer-events-none">
+  <div id="floating-controls" class="fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col items-center gap-2.5 transition-opacity duration-500 opacity-0 pointer-events-none">
+    <!-- Auto-Scroll Toggle Button -->
+    <button id="btn-autoscroll" onclick="toggleAutoScroll()" class="relative group w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#ab7a45] via-[#8e6130] to-[#640e1b] text-white border-2 border-[#f7e3cd] shadow-[0_4px_16px_rgba(100,14,27,0.35)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer pointer-events-auto" aria-label="Toggle Auto-Scroll" title="Pause / Resume Auto-Scroll">
+      <span id="autoscroll-icon" class="text-xs sm:text-sm font-bold select-none font-sans">⏸</span>
+      <span id="autoscroll-ring" class="absolute -inset-1 rounded-full border border-[#ab7a45]/60 animate-ping pointer-events-none"></span>
+    </button>
+
     <!-- Music Mute / Unmute Toggle Button -->
     <button id="btn-music" onclick="toggleMusic()" class="relative group w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-[#ab7a45] via-[#8e6130] to-[#640e1b] text-white border-2 border-[#f7e3cd] shadow-[0_6px_20px_rgba(100,14,27,0.45)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer pointer-events-auto" aria-label="Toggle Sound" title="Mute / Unmute Sound">
       <span id="music-icon" class="text-xl sm:text-2xl select-none">🔊</span>
