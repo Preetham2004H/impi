@@ -343,8 +343,10 @@ function toggleMusic() {
 }
 
 // --- 4. Smart Autoscroll Engine (Safari & Cross-Browser Fluid Scroll) ---
-const SCROLL_SPEED_PER_FRAME = 0.95; // Exactly ~10% faster than original (0.85 -> 0.95), smooth and graceful
+// Exactly 2x the original reading speed (original ~55 px/sec -> now 110 px/sec)
+const SCROLL_SPEED_PX_PER_SEC = 110;
 let scrollAccumulator = 0.0;
+let lastScrollTime = null;
 let userInteractionTimeout = null;
 
 function startAutoScroll() {
@@ -352,6 +354,7 @@ function startAutoScroll() {
   isAutoScrollActive = true;
   isUserInteracting = false;
   scrollAccumulator = 0.0;
+  lastScrollTime = null;
 
   if (autoScrollRafId) {
     cancelAnimationFrame(autoScrollRafId);
@@ -366,6 +369,7 @@ function pauseAutoScroll() {
     cancelAnimationFrame(autoScrollRafId);
     autoScrollRafId = null;
   }
+  lastScrollTime = null;
 }
 
 function toggleAutoScroll() {
@@ -376,8 +380,15 @@ function toggleAutoScroll() {
   }
 }
 
-function runScrollLoop() {
+function runScrollLoop(timestamp) {
   if (!isAutoScrollActive) return;
+
+  if (lastScrollTime === null) {
+    lastScrollTime = timestamp;
+  }
+  // Clamp delta to prevent sudden jump if tab is switched
+  const deltaSeconds = Math.min((timestamp - lastScrollTime) / 1000.0, 0.08);
+  lastScrollTime = timestamp;
 
   if (!isUserInteracting) {
     const scrollTarget = document.scrollingElement || document.documentElement || document.body;
@@ -386,8 +397,8 @@ function runScrollLoop() {
 
     // Only scroll downward if not already at the bottom
     if (currentScroll < maxScroll - 4) {
-      // Accumulate 0.95px per frame (~10% faster than 0.85)
-      scrollAccumulator += SCROLL_SPEED_PER_FRAME;
+      // Time-based smooth accumulator: exactly 110px/sec on all refresh rates (60Hz, 120Hz ProMotion)
+      scrollAccumulator += SCROLL_SPEED_PX_PER_SEC * deltaSeconds;
 
       // Issue discrete integer scroll steps so Safari/WebKit never truncates to 0
       if (scrollAccumulator >= 1.0) {
@@ -425,6 +436,7 @@ function onUserTouchEnd() {
   userInteractionTimeout = setTimeout(() => {
     isUserInteracting = false;
     scrollAccumulator = 0.0;
+    lastScrollTime = null; // Reset delta so it resumes seamlessly without jump
   }, 1200);
 }
 
@@ -441,6 +453,7 @@ window.addEventListener('wheel', () => {
   userInteractionTimeout = setTimeout(() => {
     isUserInteracting = false;
     scrollAccumulator = 0.0;
+    lastScrollTime = null;
   }, 1200);
 }, { passive: true });
 
