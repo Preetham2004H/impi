@@ -1,0 +1,312 @@
+/* ========================================================
+   Chandru & Impu — Wedding Invitation Animation Stylesheet
+   ======================================================== */
+
+/* Scene 1 — Smooth Fade-In on Page Load */
+@keyframes sceneFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scene-fade-in {
+  animation: sceneFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Corner Flower Pop-Up and Slow Disappearance */
+.flower-pop-tl {
+  transform: scale(1.42) translate(-14px, -14px) !important;
+  opacity: 0 !important;
+  transition: transform 1.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none !important;
+}
+
+.flower-pop-br {
+  transform: scale(1.42) translate(14px, 14px) !important;
+  opacity: 0 !important;
+  transition: transform 1.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 1.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none !important;
+}
+
+/* Subtle Floating Breathing Movement on Card */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-subtle-float {
+  animation: subtleFloat 5s ease-in-out infinite;
+}
+
+/* Gentle Romantic Background Ambient Movement */
+@keyframes bgDrift {
+  0%, 100% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -1%);
+    opacity: 0.95;
+  }
+}
+
+.animate-bg-drift {
+  animation: bgDrift 14s ease-in-out infinite;
+}
+
+/* Tiny Glowing Background Shimmer Particles */
+@keyframes twinkleGlow {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.8) translateY(0px);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.2) translateY(-8px);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkleGlow 4s ease-in-out infinite;
+}
+
+/* Scene 2 — Button Gentle Shimmer & Pulse */
+@keyframes gentleShimmer {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  30%, 100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.animate-gentle-shimmer {
+  animation: gentleShimmer 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes buttonSoftPulse {
+  0%, 100% {
+    box-shadow: 0 4px 18px rgba(100, 14, 27, 0.45), 0 0 12px rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    box-shadow: 0 6px 24px rgba(100, 14, 27, 0.65), 0 0 18px rgba(212, 175, 55, 0.35);
+  }
+}
+
+.animate-button-soft-pulse {
+  animation: buttonSoftPulse 3s ease-in-out infinite;
+}
+
+/* Wax Seal Pulse Animation */
+@keyframes sealPulse {
+  0%, 100% {
+    transform: translate(-50%, 0) scale(1);
+    box-shadow: 0 4px 18px rgba(100, 14, 27, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.35);
+  }
+  50% {
+    transform: translate(-50%, 0) scale(1.05);
+    box-shadow: 0 8px 26px rgba(171, 122, 69, 0.65), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.animate-seal-pulse {
+  animation: sealPulse 2.4s ease-in-out infinite;
+}
+
+/* Scene 3 — Blossom Petal Shower Falling Downward (Reference 3) */
+@keyframes showerFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate3d(var(--drift-x, 10px), 40px, 0) rotate(90deg) scale(1.05);
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(calc(var(--drift-x, 10px) * 2.4), var(--fall-dist, 480px), 0) rotate(360deg) scale(0.7);
+    opacity: 0;
+  }
+}
+
+.animate-shower-petal {
+  will-change: transform, opacity;
+  animation-name: showerFall;
+  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+
+/* Ambient Floating Petals (Scene 1 & Main screen) */
+@keyframes ambientFall {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg) scale(0.85);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(var(--sway, 25px), 50vh, 0) rotate(180deg) scale(1.02);
+    opacity: 0.85;
+  }
+  85% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(calc(var(--sway, 25px) * -0.5), 105vh, 0) rotate(360deg) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.animate-petal {
+  will-change: transform, opacity;
+  animation-name: ambientFall;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation-iteration-count: infinite;
+}
+
+/* Spinning Vinyl for Music Button */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf7ee;
+}
+::-webkit-scrollbar-thumb {
+  background: #ab7a45;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #640e1b;
+}
+
+/* 3D Coverflow Swiper Gallery */
+.gallery-coverflow-swiper {
+  width: 100%;
+  padding-top: 25px;
+  padding-bottom: 55px;
+  perspective: 1200px;
+}
+
+.gallery-coverflow-swiper .swiper-wrapper {
+  align-items: center;
+}
+
+.gallery-coverflow-swiper .swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 225px !important;
+  height: 335px !important;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 15px 35px -8px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(171, 122, 69, 0.35);
+  transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.45s ease, opacity 0.45s ease;
+  will-change: transform;
+}
+
+.gallery-coverflow-swiper .swiper-slide-active {
+  box-shadow: 0 22px 50px -10px rgba(0, 0, 0, 0.55), 0 0 20px rgba(171, 122, 69, 0.25);
+  border-color: rgba(171, 122, 69, 0.65);
+}
+
+@media (min-width: 640px) {
+  .gallery-coverflow-swiper .swiper-slide {
+    width: 275px !important;
+    height: 395px !important;
+  }
+}
+
+.gallery-coverflow-swiper .swiper-slide-shadow-left,
+.gallery-coverflow-swiper .swiper-slide-shadow-right {
+  border-radius: 1.25rem;
+  background-image: linear-gradient(to right, rgba(25, 8, 12, 0.6), rgba(0, 0, 0, 0.12)) !important;
+}
+
+.gallery-coverflow-swiper .swiper-pagination-bullet {
+  background: #ab7a45 !important;
+  opacity: 0.35;
+  transition: all 0.35s ease;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px !important;
+}
+
+.gallery-coverflow-swiper .swiper-pagination-bullet-active {
+  background: #640e1b !important;
+  opacity: 1 !important;
+  width: 24px !important;
+  border-radius: 9999px !important;
+}
+
+/* Elegant Coverflow Nav Buttons matching Reference */
+.gallery-nav-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  background: rgba(253, 248, 240, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(171, 122, 69, 0.38);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+  color: #640e1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  z-index: 25;
+  transform: translateY(-50%);
+}
+
+.gallery-nav-btn:hover {
+  background: #ffffff;
+  color: #8b1828;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 22px rgba(100, 14, 27, 0.22);
+  border-color: #ab7a45;
+}
+
+.gallery-nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Touch and Mobile Safe Area Support */
+body {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth Image Drag prevention */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}

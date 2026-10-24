@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Chandru and Impu Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:wedding-reception-2026@chandru-impu.wedding
+DTSTAMP:20261023T154021Z
+DTSTART:20261128T130000Z
+DTEND:20261128T170000Z
+SUMMARY:Wedding Reception | Chandrashekar Gowda M & Impu L
+DESCRIPTION:Wedding Reception of Chandrashekar Gowda M & Impu L\nSaturday, November 28, 2026 • 6:30 PM\nVenue: NANDHANA CONVENTION HALL, Bengaluru
+LOCATION:NANDHANA CONVENTION HALL, Ullal Main Rd, Jnananjyothinagar, Bengaluru, Karnataka 560056
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR
