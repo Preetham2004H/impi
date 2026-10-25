@@ -1,0 +1,17 @@
+node_modules/
+.git/
+.github/
+*.log
+package.json
+package-lock.json
+server.js
+README.md
+extract.js
+locate.js
+.wrangler/
+cloudflared.log
+
+images/*-raw.jpg
+images/DSC09301.jpg
+song-full.mp3
+*.py

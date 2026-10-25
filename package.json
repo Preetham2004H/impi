@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Interactive wedding invitation website for Chandru & Impu",
   "scripts": {
+    "build": "echo 'Static build ready'",
     "start": "node server.js",
     "dev": "node server.js",
     "deploy": "wrangler deploy"
