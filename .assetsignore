@@ -1,0 +1,17 @@
+# Exclude dependencies and build artifacts from static assets upload
+node_modules/
+.git/
+.github/
+*.log
+package.json
+package-lock.json
+server.js
+README.md
+extract.js
+locate.js
+.wrangler/
+cloudflared.log
+
+# Exclude unused raw images
+images/*-raw.jpg
+images/DSC09301.jpg

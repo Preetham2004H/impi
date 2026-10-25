@@ -1,21 +1,21 @@
 {
-  "name": "chandru-impu-wedding-invitation",
+  "name": "impi",
   "version": "1.0.0",
-  "description": "Interactive, autoscrolling wedding invitation website for Chandru & Impu",
-  "main": "server.js",
+  "description": "Interactive wedding invitation website for Chandru & Impu",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "deploy": "wrangler deploy"
   },
   "keywords": [
     "wedding",
     "invitation",
     "autoscroll",
-    "cloudflare-pages"
+    "cloudflare"
   ],
   "author": "Antigravity",
   "license": "MIT",
   "devDependencies": {
-    "playwright-core": "^1.64.1"
+    "wrangler": "^4.152.0"
   }
 }
