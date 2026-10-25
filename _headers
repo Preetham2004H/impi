@@ -1,0 +1,11 @@
+/*
+  Accept-Ranges: bytes
+  Access-Control-Allow-Origin: *
+
+/song.mp3
+  Accept-Ranges: bytes
+  Content-Type: audio/mpeg
+
+/song.mpeg
+  Accept-Ranges: bytes
+  Content-Type: audio/mpeg

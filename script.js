@@ -244,11 +244,10 @@ const audio = document.getElementById('wedding-audio');
 const musicIcon = document.getElementById('music-icon');
 const btnMusic = document.getElementById('btn-music');
 
-const AUDIO_START_OFFSET = 20.0; // Playback starts from 00:00:20
-let hasSeekedInitialStart = false;
+const AUDIO_START_OFFSET = 0.0; // Audio is trimmed natively to start at 00:00:20
 
 if (audio) {
-  audio.src = 'song.mpeg';
+  audio.src = 'song.mp3';
 }
 
 function updateMusicUI(isPlaying) {
@@ -270,11 +269,11 @@ function updateMusicUI(isPlaying) {
   }
 }
 
-// When audio ends, loop back seamlessly to 22.0 seconds
+// When audio ends, loop back seamlessly
 if (audio) {
   audio.addEventListener('ended', () => {
     try {
-      audio.currentTime = AUDIO_START_OFFSET;
+      audio.currentTime = 0;
       audio.play().then(() => updateMusicUI(true)).catch(() => updateMusicUI(false));
     } catch (e) {
       console.log("Loop restart:", e);
@@ -290,27 +289,13 @@ function playMusic() {
   if (playPromise !== undefined) {
     playPromise.then(() => {
       updateMusicUI(true);
-
-      // Seek to 22 seconds once playback has started
-      if (!hasSeekedInitialStart) {
-        try {
-          audio.currentTime = AUDIO_START_OFFSET;
-          hasSeekedInitialStart = true;
-        } catch (e) {
-          console.log("Initial seek deferred:", e);
-        }
-      }
     }).catch((err) => {
       console.log("Audio play error:", err);
-      // Fallback: if song.mpeg failed, try song.mp3
-      if (audio.src && !audio.src.includes('song.mp3')) {
-        audio.src = 'song.mp3';
+      // Fallback: try song.mpeg if song.mp3 had issue
+      if (audio.src && !audio.src.includes('song.mpeg')) {
+        audio.src = 'song.mpeg';
         audio.play().then(() => {
           updateMusicUI(true);
-          try {
-            audio.currentTime = AUDIO_START_OFFSET;
-            hasSeekedInitialStart = true;
-          } catch (e) {}
         }).catch((e2) => {
           console.log("Fallback failed:", e2);
           updateMusicUI(false);
@@ -332,12 +317,6 @@ function toggleMusic() {
   } else {
     // Currently muted -> Unmute & Play
     audio.muted = false;
-    if (!hasSeekedInitialStart) {
-      try {
-        audio.currentTime = AUDIO_START_OFFSET;
-        hasSeekedInitialStart = true;
-      } catch (e) {}
-    }
     playMusic();
   }
 }

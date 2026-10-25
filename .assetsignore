@@ -12,6 +12,8 @@ locate.js
 .wrangler/
 cloudflared.log
 
-# Exclude unused raw images
+# Exclude unused raw files
 images/*-raw.jpg
 images/DSC09301.jpg
+song-full.mp3
+*.py
