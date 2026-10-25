@@ -1,2 +1,5 @@
 /jeevs /jeevs.html 200
 /jeevs/ /jeevs.html 200
+/impu /index.html 200
+/impu/ /index.html 200
+/impu/* /:splat 200
